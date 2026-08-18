@@ -1,4 +1,9 @@
-<h1 align="center">ChatGPT Community for Linux</h1>
+<h1 align="center">Codex Desktop with OpenCode Go</h1>
+
+<p align="center"><b>Fork of <a href="https://github.com/ilysenko/codex-desktop-linux">ilysenko/codex-desktop-linux</a>
+that documents and ships an OpenCode Go model integration: pick OpenCode Go
+models straight from the desktop model picker. See
+<a href="docs/opencode-go.md">docs/opencode-go.md</a> for the full setup.</b></p>
 
 <p align="center">
   <a href="https://github.com/ilysenko/codex-desktop-linux/actions/workflows/ci.yml"><img src="https://github.com/ilysenko/codex-desktop-linux/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
@@ -45,8 +50,8 @@ coding agents should also read [AGENTS.md](AGENTS.md).
 Clone the repository before building a native package or AppImage:
 
 ```bash
-git clone https://github.com/ilysenko/codex-desktop-linux.git
-cd codex-desktop-linux
+git clone https://github.com/prdai-archive/codex-desktop-opencode.git
+cd codex-desktop-opencode
 ```
 
 | Platform | Recommended command | Result |
