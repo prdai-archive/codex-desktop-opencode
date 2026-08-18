@@ -1,0 +1,27 @@
+#!/bin/sh
+# Switch the Codex desktop app between the ChatGPT subscription and OpenCode Go.
+# Usage: codex-host opencode | codex-host chatgpt
+set -eu
+CFG="$HOME/.codex/config.toml"
+MODE="${1:-}"
+[ "$MODE" = opencode ] || [ "$MODE" = chatgpt ] || { echo "usage: codex-host opencode|chatgpt"; exit 1; }
+python3 - "$CFG" "$MODE" <<'PY'
+import sys
+path, mode = sys.argv[1], sys.argv[2]
+lines = open(path).read().splitlines(True)
+out = []
+top = True
+for line in lines:
+    if line.lstrip().startswith('['):
+        top = False
+    if top and mode == 'chatgpt' and (line.startswith('model_provider = "opencode_go"') or line.startswith('model = ')):
+        line = '#' + line
+    elif top and mode == 'opencode' and (line.startswith('#model_provider = "opencode_go"') or line.startswith('#model = ')):
+        line = line[1:]
+    out.append(line)
+open(path, 'w').write(''.join(out))
+PY
+pkill -f '/opt/codex-opencode[-]desktop' 2>/dev/null || true
+sleep 2
+setsid /usr/bin/codex-opencode-desktop >/dev/null 2>&1 < /dev/null &
+echo "switched to $MODE, app restarting"

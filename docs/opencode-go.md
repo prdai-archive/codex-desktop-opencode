@@ -170,3 +170,19 @@ Then launch the app and pick any OpenCode Go model (for example `minimax-m3`,
 - A handful of OpenCode Go models (the DeepSeek v4 family, gpt-5.6-luna,
   grok-4.5 at the time of writing) also accept `/responses` natively, but the
   bridge covers the whole catalog uniformly.
+
+## Known issues and switching hosts
+
+- LiteLLM 1.97.0's Responses streaming transformer crashes with
+  `IndexError: list index out of range` on provider chunks with empty
+  `choices` (for example MiniMax usage-only chunks), which surfaces in the
+  app as "stream disconnected before completion". Until the fix lands
+  upstream, guard the three `chunk.choices[0]` accesses in
+  `litellm/responses/litellm_completion_transformation/streaming_iterator.py`
+  (`_ensure_output_item_for_chunk`, `_is_reasoning_end`,
+  `_get_delta_string_from_streaming_choices`) to return early when
+  `choices` is empty.
+- A ChatGPT subscription is not an API, so it cannot be routed through the
+  bridge; the app uses one host at a time. `contrib/opencode/codex-host`
+  toggles the top-level `model_provider`/`model` keys and restarts the app:
+  `codex-host opencode` or `codex-host chatgpt`.
