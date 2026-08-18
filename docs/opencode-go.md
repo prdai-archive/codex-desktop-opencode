@@ -182,7 +182,11 @@ Then launch the app and pick any OpenCode Go model (for example `minimax-m3`,
   (`_ensure_output_item_for_chunk`, `_is_reasoning_end`,
   `_get_delta_string_from_streaming_choices`) to return early when
   `choices` is empty.
-- A ChatGPT subscription is not an API, so it cannot be routed through the
-  bridge; the app uses one host at a time. `contrib/opencode/codex-host`
-  toggles the top-level `model_provider`/`model` keys and restarts the app:
-  `codex-host opencode` or `codex-host chatgpt`.
+- The shim can serve BOTH catalogs at once: it merges the ChatGPT
+  subscription catalog (fetched from the ChatGPT backend with the tokens the
+  app maintains in `~/.codex/auth.json`) with the OpenCode Go list, and
+  routes each `/responses` call by model slug: ChatGPT-catalog models go to
+  `chatgpt.com/backend-api/codex` with the subscription auth, everything
+  else goes to the LiteLLM bridge. Picking a GPT model or an OpenCode model
+  in the same picker both just work. `contrib/opencode/codex-host` remains
+  as a fallback to flip the whole host if ever needed.
