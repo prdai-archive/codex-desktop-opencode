@@ -190,3 +190,14 @@ Then launch the app and pick any OpenCode Go model (for example `minimax-m3`,
   else goes to the LiteLLM bridge. Picking a GPT model or an OpenCode model
   in the same picker both just work. `contrib/opencode/codex-host` remains
   as a fallback to flip the whole host if ever needed.
+
+## Mixed-thread caveat
+
+With a ChatGPT account signed in, Codex pins a thread to the ChatGPT backend
+once a subscription model has been used in it, bypassing the configured
+provider. Switching that thread to an OpenCode model then fails with "model
+is not supported when using Codex with a ChatGPT account". Switch models
+freely within one family inside a chat, but start a new chat when moving
+between a subscription model and an OpenCode model. Do not set
+`forced_login_method = "api"` to work around this: it logs the app out and
+deletes `~/.codex/auth.json`.
