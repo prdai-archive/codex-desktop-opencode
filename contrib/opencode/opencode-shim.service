@@ -1,0 +1,11 @@
+[Unit]
+Description=Codex models shim in front of LiteLLM OpenCode bridge
+After=litellm-opencode.service
+
+[Service]
+ExecStart=/home/ranuga/.local/share/pi-node/node-v22.22.3-linux-x64/bin/node /home/ranuga/.config/litellm/codex-models-shim.js
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=LiteLLM bridge for OpenCode Go (Responses to Chat Completions)
+After=network-online.target
+
+[Service]
+EnvironmentFile=%h/.config/environment.d/50-opencode.conf
+ExecStart=%h/.local/bin/litellm --config %h/.config/litellm/opencode.yaml --host 127.0.0.1 --port 4000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
